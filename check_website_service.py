@@ -33,14 +33,15 @@ if answer.status_code == 200:
     table_string = re.findall('.*?Klasse\(n\).*?(<tr class.*?</table>)', answer.text, re.DOTALL)
     text_list = re.findall('.*?<tr.*?<td.*?>(.*?)<', table_string[0])
 
-    pupil_class = config("pupil_class", cast=Csv())
-    pupil_address = config("pupil_address", cast=Csv())
-    pupils = dict(zip(pupil_class, pupil_address))
+    pupils_class = config("pupils_class", cast=Csv())
+    pupils_address = config("pupils_address", cast=Csv())
+    pupils = dict(zip(pupils_class, pupils_address))
 
     for klasse, address in pupils.items():
         entry_found = False
         for text in text_list:
             print('target text: ', text)
+            if len(klasse)<3 : print('error: wrong class format -> ', klasse); exit();
             if klasse[:2] in text and klasse[2] in text:  # eg. check for '05' and 'a' in text
                 print('entry found in: ', text)
                 entry_found = True
